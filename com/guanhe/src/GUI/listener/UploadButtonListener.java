@@ -1,4 +1,4 @@
-package com.guanhe.src.listener;
+package com.guanhe.src.GUI.listener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import static com.guanhe.src.mydemo.myhuffman.getZip;
 
 public class UploadButtonListener implements ActionListener {
     @Override
@@ -17,8 +16,8 @@ public class UploadButtonListener implements ActionListener {
             File selectedFile = fileChooser.getSelectedFile();
             System.out.println("选择了文件: " + selectedFile.getAbsolutePath());
             try {
-                getZip(selectedFile);
-            } catch (IOException ex) {
+
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
             JOptionPane.showMessageDialog(null,"请选择压缩文件输出位置（务必选择文件夹）");

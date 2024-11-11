@@ -1,4 +1,4 @@
-package com.guanhe.src.GUI;
+package com.guanhe.src.GUI.frame;
 
 
 import javax.swing.*;
