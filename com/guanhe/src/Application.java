@@ -9,6 +9,7 @@ import com.guanhe.src.Util.serialization.Serialize;
 import com.guanhe.src.myHuff.MyHuffNode;
 import com.guanhe.src.myHuff.Myhuffman;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
@@ -23,7 +24,7 @@ public class Application {
 
     public static void main(String[] args) throws IOException {
 
-        demo1();
+        demo2();
 
     }
 
@@ -37,6 +38,7 @@ public class Application {
         for (byte b : bytes) {
             System.out.print(b + " ");
         }
+        String target="E:\\desk\\党章.huff";
         System.out.println("\n二进制：");
         String temp = convert.byteToBin(bytes);
         System.out.println(temp);
@@ -44,6 +46,21 @@ public class Application {
         System.out.println("哈夫曼编码二进制：");
         String ans = Myhuffman.huffman(bytes);
         System.out.println(ans);
+        byte[] binToByte = convert.binToByte(ans);
+        try {
+            // 使用try-with-resources语句确保资源关闭
+            try (FileOutputStream fos = new FileOutputStream(target)) {
+                // 将字节数组写入文件
+                fos.write(binToByte);
+                System.out.println("二进制字符串已成功写入文件: " + target);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("写入文件时发生错误: " + e.getMessage());
+        }
+
+
+
 
         Map<Byte,String> map=Myhuffman.buildTable(huffNode);
         System.out.println(map);
@@ -55,6 +72,29 @@ public class Application {
 
         String s = convert.byteToBin(serialize1);
         System.out.println("\n"+s.length());
+    }
+
+    private static void demo3() throws IOException {
+        String source="E:\\desk\\党章.docx";
+        String target="E:\\desk\\党章.huff";
+        ConvertInterface convert = new ConvertImpl();
+        Myhuffman myhuffman = new Myhuffman();
+        HessianSerializer serialize=new HessianSerializer();
+        byte[] sourceBytes = convert.fileToByte(source);
+        String huffmanBin = Myhuffman.huffman(sourceBytes);
+        byte[] huffmanBytes = convert.binToByte(huffmanBin);
+        try {
+            // 使用try-with-resources语句确保资源关闭
+            try (FileOutputStream fos = new FileOutputStream(target)) {
+                // 将字节数组写入文件
+                fos.write(huffmanBytes);
+                System.out.println("二进制字符串已成功写入文件: " + target);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("写入文件时发生错误: " + e.getMessage());
+        }
+
     }
 
     private static void demo1() throws IOException {

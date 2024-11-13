@@ -1,5 +1,9 @@
 package com.guanhe.src.myHuff;
 
+import com.guanhe.src.Util.convert.ConvertImpl;
+import com.guanhe.src.Util.convert.ConvertInterface;
+import com.guanhe.src.Util.serialization.HessianSerializer;
+
 import java.io.*;
 import java.util.*;
 
@@ -20,6 +24,43 @@ public class Myhuffman {
     }
 
 
+    public static boolean func(String source,String target) throws IOException {
+        ConvertInterface convert = new ConvertImpl();
+
+        HessianSerializer serialize=new HessianSerializer();
+        System.out.println("原始字节：");
+        byte[] bytes= convert.fileToByte(source);
+        for (byte b : bytes) {
+            System.out.print(b + " ");
+        }
+
+        System.out.println("\n二进制：");
+        String temp = convert.byteToBin(bytes);
+        System.out.println(temp);
+
+        System.out.println("哈夫曼编码二进制：");
+        String ans = Myhuffman.huffman(bytes);
+        System.out.println(ans);
+
+
+        Map<Byte,String> map=Myhuffman.buildTable(huffNode);
+        System.out.println("huffmanTable");
+        System.out.println(map);
+
+        System.out.println("serialize table:");
+        byte[] serialize1 = serialize.serialize(map);
+        for(byte b:serialize1){
+            System.out.print(b+" ");
+        }
+
+
+        String s = convert.byteToBin(serialize1);
+        System.out.println("\n"+s.length());
+
+
+        return true;
+
+    }
 
 
     public static MyHuffNode tableToTree(Map<Byte,String> table){

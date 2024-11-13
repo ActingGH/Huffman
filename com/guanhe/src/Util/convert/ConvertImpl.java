@@ -36,15 +36,20 @@ public class ConvertImpl implements ConvertInterface{
 
     @Override
     public byte[] binToByte(String s) {
-        int length=s.length();
-        byte[] bytes=new byte[length/8];
+        int length = s.length();
+        byte[] bytes = new byte[length / 8 + (length % 8 == 0 ? 0 : 1)];
         for (int i = 0; i < length; i += 8) {
-            // 提取 8 位二进制字符串
-            String byteStr = s.substring(i, i + 8);
-            // 将 8 位二进制字符串转换为整数
-            int byteValue = Integer.parseInt(byteStr, 2);
-            // 将整数转换为字节并存入数组
-            bytes[i / 8] = (byte) byteValue;
+            // 获取 8 位二进制子字符串
+            int end = Math.min(i + 8, length);
+            String byteStr = s.substring(i, end);
+            // 将二进制字符串转换为 int
+            int intValue = Integer.parseInt(byteStr, 2);
+            // 将 int 转换为 byte
+            byte byteValue = (byte) intValue;
+            // 将 byte 值存储到数组中
+            if (i / 8 < bytes.length) { // 防止数组越界
+                bytes[i / 8] = byteValue;
+            }
         }
         return bytes;
     }
