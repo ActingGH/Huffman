@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Map;
 
 public class Func1 {
 
@@ -71,5 +72,42 @@ public class Func1 {
 
         commonFunc2("E:\\desk\\座次表.huffman-gh","E:\\desk\\座次表.huffman-code");
     }
+
+    public static String cmdMo(String s) throws IOException {
+        ConvertInterface convert = new ConvertImpl();
+        Myhuffman myhuffman = new Myhuffman();
+        StringBuilder output = new StringBuilder();
+
+        output.append("原始字节：\n");
+        byte[] bytes = s.getBytes();
+        for (byte b : bytes) {
+            output.append(b).append(" ");
+        }
+        output.append("\n");
+
+        output.append("二进制：\n");
+        String temp = convert.byteToBin(bytes);
+        output.append(temp).append("\n");
+
+        output.append("哈夫曼编码二进制：\n");
+        String ans = myhuffman.huffman(bytes);
+        output.append(ans).append("\n");
+
+        output.append("哈夫曼表：\n");
+        output.append("二进制编码 ：字节\n");
+        Map<Byte, String> huffmanTable = Myhuffman.buildTable(myhuffman.getHuffNode());
+        for (Map.Entry<Byte, String> entry : huffmanTable.entrySet()) {
+            output.append(entry.getValue()).append(" : ").append(entry.getKey()).append("\n");
+        }
+
+        output.append("根据哈夫曼树恢复的字节：\n");
+        byte[] result = convert.huffmanbinTobyte(ans, myhuffman.getHuffNode());
+        for (byte b : result) {
+            output.append(b).append(" ");
+        }
+
+        return output.toString();
+    }
+
 
 }
