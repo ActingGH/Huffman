@@ -7,6 +7,16 @@ public class MyHuffNode implements Comparable<MyHuffNode> , Serializable {
      * 出现频率 避免文件过大无法内存溢出
      * 使用long类型存储
      */
+    static String type;
+
+    public  void setType(String type) {
+        this.type=type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     public long frency;
     /**
      * 左节点
