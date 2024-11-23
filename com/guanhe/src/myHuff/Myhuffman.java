@@ -1,5 +1,9 @@
 package com.guanhe.src.myHuff;
 
+import com.guanhe.src.Util.convert.ConvertImpl;
+import com.guanhe.src.Util.convert.ConvertInterface;
+import com.guanhe.src.Util.serialization.HessianSerializer;
+
 import java.io.*;
 import java.util.*;
 
@@ -11,6 +15,7 @@ public class Myhuffman {
      */
     public  static MyHuffNode huffNode;
 
+    public MyHuffNode myHuffNode;
     /**
      * 返回哈夫曼树
      * @return
@@ -19,6 +24,13 @@ public class Myhuffman {
         return huffNode;
     }
 
+    public static byte[] toHuffmanBype(String source) throws IOException {
+        ConvertInterface convert=new ConvertImpl();
+        HessianSerializer serializer=new HessianSerializer();
+        byte[] originBytes=convert.fileToByte(source);
+        String ans=Myhuffman.huffman(originBytes);
+        return  convert.binToByte(ans);
+    }
 
 
 
@@ -93,6 +105,14 @@ public class Myhuffman {
     public static String huffman(byte[] bytes) {
         MyHuffNode myHuffNode = buildeTree(bytes);
         huffNode = myHuffNode;
+        Map<Byte, String> byteStringMap = buildTable(myHuffNode);
+        String encode = encode(bytes, byteStringMap);
+        return encode;
+    }
+
+    public  String huffmanFun(byte[] bytes) {
+        MyHuffNode myHuffNode = buildeTree(bytes);
+        this.myHuffNode = myHuffNode;
         Map<Byte, String> byteStringMap = buildTable(myHuffNode);
         String encode = encode(bytes, byteStringMap);
         return encode;
