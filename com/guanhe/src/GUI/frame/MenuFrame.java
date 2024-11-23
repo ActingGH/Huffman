@@ -1,6 +1,5 @@
 package com.guanhe.src.GUI.frame;
 
-import com.guanhe.src.GUI.listener.CmdButtonListener;
 import com.guanhe.src.GUI.listener.UnHuffmanButtonListener;
 import com.guanhe.src.GUI.listener.UploadButtonListener;
 import com.guanhe.src.feature.Func1;
@@ -12,7 +11,7 @@ import java.io.*;
 
 public class MenuFrame extends JFrame {
     JPanel root;
-    JButton unzipButton, zipButton, exampleButton;
+    JButton unzipButton, zipButton, exampleButton, closeButton;
     JTextArea resultTextArea;
 
     public MenuFrame() throws IOException {
@@ -24,12 +23,14 @@ public class MenuFrame extends JFrame {
         unzipButton = createButton("普通解压", 425, 400);
         zipButton = createButton("普通压缩", 125, 400);
         exampleButton = createButton();
-
+        closeButton = createButton("关闭", 1200, 10);
         // 添加一个按钮来触发输入框和结果显示
-
+        closeButton.addActionListener(e -> {
+            setSize(800, 600);
+        });
         exampleButton.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(this, "请输入要要编码的字符串:");
-            if (input != null && !input.isEmpty()) {
+            if (!input.isBlank() && input != null && !input.isEmpty()) {
                 String result = null; // 处理输入并生成结果
                 try {
                     result = processInput(input);
@@ -39,12 +40,11 @@ public class MenuFrame extends JFrame {
                 }
                 resultTextArea.setText(result);
 
-            }
+            } else JOptionPane.showMessageDialog(this, "禁止输入空格");
         });
 
         // 添加点击事件
         zipButton.addActionListener(new UploadButtonListener());
-        exampleButton.addActionListener(new CmdButtonListener());
         unzipButton.addActionListener(new UnHuffmanButtonListener());
 
 
@@ -52,7 +52,7 @@ public class MenuFrame extends JFrame {
         root.add(unzipButton);
         root.add(zipButton);
         root.add(exampleButton);
-
+        root.add(closeButton);
         // 添加说明文档
         root.add(createText());
 
@@ -131,7 +131,7 @@ public class MenuFrame extends JFrame {
     }
 
     public static JLabel createImageLabel() {
-        ImageIcon imageIcon = new ImageIcon("com/guanhe/src/GUI/img/img.png");
+        ImageIcon imageIcon =  new ImageIcon(MenuFrame.class.getResource("/img.png"));
         JLabel imageLabel = new JLabel(imageIcon);
         imageLabel.setBounds(50, 110, 250, 250);
         return imageLabel;
